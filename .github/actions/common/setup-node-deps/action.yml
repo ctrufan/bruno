@@ -23,6 +23,12 @@ runs:
       shell: ${{ inputs.shell }}
       run: npm ci --legacy-peer-deps
 
+    # Electron no longer downloads its binary in a postinstall script; fetch it
+    # up front so later steps (chrome-sandbox setup, Playwright) find it on disk.
+    - name: Download Electron binary
+      shell: ${{ inputs.shell }}
+      run: npx --no install-electron
+
     - name: Build libraries
       if: inputs.skip-build != 'true'
       shell: ${{ inputs.shell }}

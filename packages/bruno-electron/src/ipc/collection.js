@@ -4,7 +4,6 @@ const fsExtra = require('fs-extra');
 const os = require('os');
 const path = require('path');
 const archiver = require('archiver');
-const extractZip = require('extract-zip');
 const AdmZip = require('adm-zip');
 const { ipcMain, shell, dialog, app } = require('electron');
 const {
@@ -2713,7 +2712,7 @@ const registerRendererEventHandlers = (mainWindow, watcher) => {
       };
 
       try {
-        await extractZip(zipFilePath, { dir: tempDir });
+        await new AdmZip(zipFilePath).extractAllToAsync(tempDir, true);
 
         validateNoExternalSymlinks(tempDir, tempDir);
 
