@@ -7,7 +7,7 @@
  */
 
 import parseCurlCommand from './parse-curl';
-import * as querystring from 'query-string';
+import querystring from 'query-string';
 import * as jsesc from 'jsesc';
 import { buildQueryString } from '@usebruno/common/utils';
 import { isStructuredContentType } from './content-type';

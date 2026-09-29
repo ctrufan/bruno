@@ -116,7 +116,7 @@ const DocsEditor = ({
     const content = docs || (isEditing ? '' : emptyPreviewContent || '');
 
     if (!editor.isDestroyed) {
-      editor.commands.setContent(content, false);
+      editor.commands.setContent(content, { emitUpdate: false });
     }
   }, [docs, editor, isMarkdownMode, isEditing, emptyPreviewContent]);
 

@@ -14,7 +14,7 @@ const Markdown = ({ onDoubleClick, content, allowHtml = true, collectionPath = '
 
   useEffect(() => {
     if (editor) {
-      editor.commands.setContent(content || '', false);
+      editor.commands.setContent(content || '', { emitUpdate: false });
     }
   }, [content, editor]);
 

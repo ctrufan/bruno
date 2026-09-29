@@ -4,7 +4,7 @@ module.exports = {
     '^.+\\.[jt]sx?$': 'babel-jest'
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!strip-json-comments|nanoid|xml-formatter)/'
+    '/node_modules/(?!strip-json-comments|nanoid|xml-formatter|query-string|decode-uri-component|split-on-first|filter-obj)/'
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': '<rootDir>/jest.cssMock.js',

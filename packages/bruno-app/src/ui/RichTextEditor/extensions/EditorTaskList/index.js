@@ -1,8 +1,10 @@
-import BulletList from '@tiptap/extension-bullet-list';
-import ListItem from '@tiptap/extension-list-item';
-import OrderedList from '@tiptap/extension-ordered-list';
-import TaskItem from '@tiptap/extension-task-item';
-import TaskList from '@tiptap/extension-task-list';
+import {
+  BulletList,
+  ListItem,
+  OrderedList,
+  TaskItem,
+  TaskList
+} from '@tiptap/extension-list';
 import {
   setupTaskListParser,
   updateTaskListDOM
