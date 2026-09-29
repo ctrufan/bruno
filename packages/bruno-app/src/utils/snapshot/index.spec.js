@@ -1064,15 +1064,13 @@ describe('getActiveTabFromSnapshot', () => {
 
 describe('hydrateCollectionTabs', () => {
   beforeEach(() => {
-    global.window = {
-      ipcRenderer: {
-        invoke: jest.fn().mockResolvedValue(null)
-      }
+    window.ipcRenderer = {
+      invoke: jest.fn().mockResolvedValue(null)
     };
   });
 
   afterEach(() => {
-    delete global.window;
+    delete window.ipcRenderer;
   });
 
   it('does not restore tabs when snapshot has no tab state', async () => {
@@ -1202,7 +1200,7 @@ describe('hydrateCollectionTabs', () => {
   });
 
   it('does not restore legacy v4 migration tabs from direct tab snapshots', async () => {
-    global.window.ipcRenderer.invoke.mockResolvedValue({
+    window.ipcRenderer.invoke.mockResolvedValue({
       tabs: [
         { type: 'v4-migration', accessor: 'type', permanent: true },
         { type: 'variables', accessor: 'type', permanent: true }
@@ -1237,7 +1235,7 @@ describe('hydrateCollectionTabs', () => {
   });
 
   it('does not restore changelog tabs from direct tab snapshots', async () => {
-    global.window.ipcRenderer.invoke.mockResolvedValue({
+    window.ipcRenderer.invoke.mockResolvedValue({
       tabs: [
         { type: 'changelog', accessor: 'pathname', permanent: true },
         { type: 'variables', accessor: 'type', permanent: true }
@@ -1274,15 +1272,13 @@ describe('hydrateCollectionTabs', () => {
 
 describe('getActiveTabFromSnapshot', () => {
   beforeEach(() => {
-    global.window = {
-      ipcRenderer: {
-        invoke: jest.fn().mockResolvedValue(null)
-      }
+    window.ipcRenderer = {
+      invoke: jest.fn().mockResolvedValue(null)
     };
   });
 
   afterEach(() => {
-    delete global.window;
+    delete window.ipcRenderer;
   });
 
   it('ignores a legacy v4 migration active tab snapshot', async () => {

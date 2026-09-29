@@ -140,7 +140,7 @@ function reinstallDependencies() {
 function startDevelopment() {
   log(LOG_LEVELS.INFO, 'Starting development servers...');
 
-  const concurrently = require('concurrently');
+  const { concurrently } = require('concurrently');
   const watchPaths = CONFIG.ELECTRON_WATCH_PATHS.map(path => `--watch "${path}"`).join(' ');
 
   // concurrently command objects: { command, name, prefixColor, env, cwd, ipc }
@@ -190,7 +190,7 @@ function startDevelopment() {
 
   const { result } = concurrently(commandObjects, {
     prefix: '[{name}: {pid}]',
-    killOthers: ['failure', 'success'],
+    killOthersOn: ['failure', 'success'],
     restartTries: 3,
     restartDelay: 1000
   });

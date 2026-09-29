@@ -9,6 +9,11 @@ const { isBuiltin } = require('module');
 const os = require('os');
 const packageJson = require('./package.json');
 
+const isExternal = (id) =>
+  isBuiltin(id)
+  || id.startsWith('@usebruno/')
+  || ['axios', 'qs', 'ws', 'debug', 'shell-env', 'pac-resolver', 'quickjs-emscripten'].includes(id);
+
 module.exports = [
   {
     input: 'src/index.ts',
@@ -42,9 +47,12 @@ module.exports = [
         maxWorkers: Math.max(1, os.availableParallelism())
       })
     ],
-    external: (id) =>
-      isBuiltin(id)
-      || id.startsWith('@usebruno/')
-      || ['axios', 'qs', 'ws', 'debug', 'shell-env', 'pac-resolver', 'quickjs-emscripten'].includes(id)
+    external: isExternal
+  },
+  {
+    input: 'src/index.ts',
+    output: [{ file: packageJson.types, format: 'esm' }],
+    plugins: [dts.default({ tsconfig: './tsconfig.json' })],
+    external: isExternal
   }
 ];
