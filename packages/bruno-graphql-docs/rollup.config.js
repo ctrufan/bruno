@@ -43,9 +43,9 @@ module.exports = [
     external: ['react', 'react-dom', 'index.css']
   },
   {
-    input: 'dist/esm/index.d.ts',
+    input: 'src/index.ts',
     external: [/\.css$/],
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
-    plugins: [dts.default()]
+    plugins: [dts.default({ tsconfig: './tsconfig.json' })]
   }
 ];

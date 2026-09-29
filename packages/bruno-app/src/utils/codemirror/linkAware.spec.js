@@ -17,16 +17,6 @@ jest.mock('utils/common/platform', () => ({
 // Mock requestAnimationFrame
 global.requestAnimationFrame = jest.fn((cb) => cb());
 
-// Mock window.ipcRenderer
-global.window = {
-  ...global.window,
-  ipcRenderer: {
-    openExternal: jest.fn()
-  },
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn()
-};
-
 describe('setupLinkAware', () => {
   let mockEditor;
   let mockDoc;
@@ -95,18 +85,18 @@ describe('setupLinkAware', () => {
 
     LinkifyIt.mockImplementation(() => mockLinkify);
 
-    // Mock window and ipcRenderer
-    global.window = {
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      ipcRenderer: {
-        openExternal: jest.fn()
-      }
+    // jsdom's window can't be replaced wholesale, so stub the members setupLinkAware touches
+    jest.spyOn(window, 'addEventListener').mockImplementation(() => {});
+    jest.spyOn(window, 'removeEventListener').mockImplementation(() => {});
+    window.ipcRenderer = {
+      openExternal: jest.fn()
     };
   });
 
   afterEach(() => {
-    delete global.window;
+    window.addEventListener.mockRestore();
+    window.removeEventListener.mockRestore();
+    delete window.ipcRenderer;
     delete global.requestAnimationFrame;
     global.setTimeout = originalTimeout;
     mockSetTimeout.mockRestore();
@@ -189,7 +179,7 @@ describe('setupLinkAware', () => {
       isMacOS.mockReturnValue(true);
       setupLinkAware(mockEditor);
 
-      const keydownHandler = global.window.addEventListener.mock.calls.find((call) => call[0] === 'keydown')[1];
+      const keydownHandler = window.addEventListener.mock.calls.find((call) => call[0] === 'keydown')[1];
       const mockEvent = { metaKey: true };
 
       keydownHandler(mockEvent);
@@ -201,7 +191,7 @@ describe('setupLinkAware', () => {
       isMacOS.mockReturnValue(false);
       setupLinkAware(mockEditor);
 
-      const keyupHandler = global.window.addEventListener.mock.calls.find((call) => call[0] === 'keyup')[1];
+      const keyupHandler = window.addEventListener.mock.calls.find((call) => call[0] === 'keyup')[1];
       const mockEvent = { ctrlKey: false };
 
       keyupHandler(mockEvent);
@@ -232,7 +222,7 @@ describe('setupLinkAware', () => {
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(mockEvent.stopPropagation).toHaveBeenCalled();
       expect(onLinkClick).toHaveBeenCalledWith('https://example.com');
-      expect(global.window.ipcRenderer.openExternal).not.toHaveBeenCalled();
+      expect(window.ipcRenderer.openExternal).not.toHaveBeenCalled();
     });
 
     it('should open external URL when Cmd+clicking on a link', () => {
@@ -254,7 +244,7 @@ describe('setupLinkAware', () => {
 
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(mockEvent.stopPropagation).toHaveBeenCalled();
-      expect(global.window.ipcRenderer.openExternal).toHaveBeenCalledWith('https://example.com');
+      expect(window.ipcRenderer.openExternal).toHaveBeenCalledWith('https://example.com');
     });
 
     it('should not open URL when clicking without modifier key', () => {
@@ -272,7 +262,7 @@ describe('setupLinkAware', () => {
 
       clickHandler(mockEvent);
 
-      expect(global.window.ipcRenderer.openExternal).not.toHaveBeenCalled();
+      expect(window.ipcRenderer.openExternal).not.toHaveBeenCalled();
     });
 
     it('should not open URL when clicking on non-link element', () => {
@@ -289,7 +279,7 @@ describe('setupLinkAware', () => {
 
       clickHandler(mockEvent);
 
-      expect(global.window.ipcRenderer.openExternal).not.toHaveBeenCalled();
+      expect(window.ipcRenderer.openExternal).not.toHaveBeenCalled();
     });
 
     it('should not open URL when data-url attribute is missing', () => {
@@ -311,7 +301,7 @@ describe('setupLinkAware', () => {
 
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(mockEvent.stopPropagation).toHaveBeenCalled();
-      expect(global.window.ipcRenderer.openExternal).not.toHaveBeenCalled();
+      expect(window.ipcRenderer.openExternal).not.toHaveBeenCalled();
     });
   });
 
@@ -533,7 +523,7 @@ describe('setupLinkAware', () => {
       mockEditor._destroyLinkAware();
 
       expect(mockEditor.off).toHaveBeenCalled();
-      expect(global.window.removeEventListener).toHaveBeenCalledTimes(2);
+      expect(window.removeEventListener).toHaveBeenCalledTimes(2);
       expect(mockWrapperElement.removeEventListener).toHaveBeenCalledTimes(4); // mousedown, click, mouseover, mouseout
       expect(mockWrapperElement.removeEventListener).toHaveBeenCalledWith('mousedown', expect.any(Function), true);
       expect(mockWrapperElement.removeEventListener).toHaveBeenCalledWith('click', expect.any(Function));
@@ -554,7 +544,7 @@ describe('setupLinkAware', () => {
     });
 
     it('should handle missing ipcRenderer', () => {
-      delete global.window.ipcRenderer;
+      delete window.ipcRenderer;
       isMacOS.mockReturnValue(true);
       setupLinkAware(mockEditor);
 

@@ -46,5 +46,10 @@ module.exports = [
       isBuiltin(id)
       || id.startsWith('@usebruno/')
       || ['axios', 'qs', 'ws', 'debug', 'shell-env', 'pac-resolver', 'quickjs-emscripten'].includes(id)
+  },
+  {
+    input: 'src/index.ts',
+    output: [{ file: packageJson.types, format: 'esm' }],
+    plugins: [dts.default({ tsconfig: './tsconfig.json' })]
   }
 ];

@@ -7,6 +7,7 @@ import {
   getApiDocsFileName,
   stripGitCredentials
 } from './index';
+import type { ApiDocsDependencies } from './index';
 
 const req = (name: string, tags?: string[]) => ({ name, type: 'http-request', tags });
 const folder = (name: string, items: any[], tags?: string[]) => ({
@@ -172,7 +173,7 @@ describe('stripGitCredentials', () => {
 describe('generateApiDocsHtml', () => {
   const makeDeps = (overrides: Record<string, unknown> = {}) => ({
     brunoToOpenCollection: jest.fn((c: any) => ({ info: { name: c.name || 'X' }, items: c.items })),
-    dumpYaml: jest.fn((obj: unknown) => JSON.stringify(obj)),
+    dumpYaml: jest.fn<ApiDocsDependencies['dumpYaml']>((obj) => JSON.stringify(obj)),
     escapeString: jest.fn((s: string) => JSON.stringify(s)),
     ...overrides
   });
