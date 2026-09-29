@@ -77,6 +77,46 @@ test.describe('Rich Text Editor Edge Cases - Links', () => {
       await expect(prosemirror).toContainText('here');
     });
   });
+  test('Clicking a link while editing opens the edit popover, not the browser', async ({ page, createTmpDir, recordExternalOpens }) => {
+    const locators = await setupRequestDocs(page, createTmpDir, 'test-richtext-link-click');
+    const externalOpens = await recordExternalOpens();
+
+    const prosemirror = locators.docs.proseMirror();
+    const editPopover = locators.docs.linkEditPopover();
+    const link = prosemirror.locator('a[href="https://example.com"]');
+
+    await test.step('Create a link', async () => {
+      await prosemirror.click();
+      await page.keyboard.type('here');
+      await page.keyboard.down('Shift');
+      for (let i = 0; i < 4; i++) {
+        await page.keyboard.press('ArrowLeft');
+      }
+      await page.keyboard.up('Shift');
+      await clickDocsToolbarBtn(locators, 'Link');
+      await locators.docs.linkEditUrlInput().fill('https://example.com');
+      await locators.docs.linkEditInsertBtn().click();
+      await expect(link).toHaveText('here');
+    });
+
+    await test.step('Clicking the link edits it', async () => {
+      await link.click();
+      await expect(editPopover).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(editPopover).toBeHidden();
+    });
+
+    await test.step('Right after re-entering edit mode, clicking the link still edits it', async () => {
+      await locators.docs.editToggle().click();
+      await expect(locators.docs.editToggle()).toBeVisible();
+      await locators.docs.editToggle().click();
+      await link.click();
+      await expect(editPopover).toBeVisible();
+    });
+
+    expect(await externalOpens.openedUrls()).toEqual([]);
+  });
+
   test('Removing the correct link when multiple links exist', async ({ page, createTmpDir }) => {
     const locators = await setupRequestDocs(page, createTmpDir, 'test-richtext-multiple-links');
 

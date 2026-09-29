@@ -208,7 +208,9 @@ const EditorLinkPopover = ({ editor, onSubmit, onUnlink, containerEl, onLinkClic
       const anchor = e.target.closest('a[href]');
       if (!anchor) return;
 
-      if (isEditable) {
+      // Read the live flag rather than the render-time `isEditable`:
+      // setEditable() doesn't trigger a re-render.
+      if (editor.isEditable) {
         e.preventDefault();
         openEditForAnchor(anchor);
         return;
@@ -242,7 +244,7 @@ const EditorLinkPopover = ({ editor, onSubmit, onUnlink, containerEl, onLinkClic
       dom.removeEventListener('click', handleClick);
       clearTimeout(hoverTimerRef.current);
     };
-  }, [editor, isEditable, editOpen, openHoverForAnchor, closeHover, openEditForAnchor, onLinkClick]);
+  }, [editor, editOpen, openHoverForAnchor, closeHover, openEditForAnchor, onLinkClick]);
 
   if (!editor) return null;
 

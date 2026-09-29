@@ -44,3 +44,51 @@ describe('parseRemoteBranches', () => {
     expect(parseRemoteBranches(undefined)).toEqual({ branches: [], defaultBranch: null });
   });
 });
+
+describe('listBranchesForRemoteUrl', () => {
+  const { execFileSync } = require('child_process');
+  const fs = require('fs');
+  const os = require('os');
+  const path = require('path');
+  const { listBranchesForRemoteUrl } = require('./git');
+
+  const userEnv = {
+    EDITOR: 'vim',
+    PAGER: 'less',
+    GIT_ASKPASS: '/usr/bin/true',
+    SSH_ASKPASS: '/usr/bin/true',
+    GIT_SSH_COMMAND: 'ssh',
+    GIT_CONFIG_COUNT: '0'
+  };
+  let workDir;
+  let savedEnv;
+
+  beforeEach(() => {
+    workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bruno-git-spec-'));
+    const git = (cwd, ...args) => execFileSync('git', args, { cwd, stdio: 'pipe' });
+    const source = path.join(workDir, 'source');
+    fs.mkdirSync(source);
+    git(source, 'init', '-q', '-b', 'main');
+    git(source, '-c', 'user.name=Bruno', '-c', 'user.email=bruno@example.com', 'commit', '-q', '--allow-empty', '-m', 'init');
+    git(source, 'branch', 'develop');
+    git(workDir, 'clone', '-q', '--bare', source, 'remote.git');
+
+    savedEnv = { ...process.env };
+    Object.assign(process.env, userEnv);
+  });
+
+  afterEach(() => {
+    for (const key of Object.keys(userEnv)) {
+      if (key in savedEnv) process.env[key] = savedEnv[key];
+      else delete process.env[key];
+    }
+    fs.rmSync(workDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+  });
+
+  it('lists branches when the user environment sets editor, pager, askpass or ssh variables', async () => {
+    const result = await listBranchesForRemoteUrl({ url: path.join(workDir, 'remote.git') });
+
+    expect(result.defaultBranch).toBe('main');
+    expect(result.branches.sort()).toEqual(['develop', 'main']);
+  });
+});

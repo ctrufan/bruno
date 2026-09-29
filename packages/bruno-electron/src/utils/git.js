@@ -755,7 +755,20 @@ const listBranchesForRemoteUrl = async ({ url }) => {
   try {
     const output = await simpleGit({
       baseDir: os.tmpdir(),
-      timeout: { block: REMOTE_BRANCH_LISTING_TIMEOUT_MS, stdOut: false, stdErr: false }
+      timeout: { block: REMOTE_BRANCH_LISTING_TIMEOUT_MS, stdOut: false, stdErr: false },
+      // simple-git refuses an explicit env containing these variables unless
+      // opted in. Here they come from the user's own environment (the same
+      // ones `git` would inherit in their shell), and credential helpers or
+      // GIT_SSH_COMMAND may be needed to reach the remote.
+      unsafe: {
+        allowUnsafeAskPass: true,
+        allowUnsafeConfigEnvCount: true,
+        allowUnsafeConfigPaths: true,
+        allowUnsafeEditor: true,
+        allowUnsafeGitProxy: true,
+        allowUnsafePager: true,
+        allowUnsafeSshCommand: true
+      }
     })
       .env({ ...process.env, GIT_TERMINAL_PROMPT: '0' })
       .listRemote(['--symref', url, 'HEAD', 'refs/heads/*']);

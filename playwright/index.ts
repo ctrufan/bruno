@@ -170,6 +170,10 @@ export type FakeClipboard = {
   copiedText: () => Promise<string>;
 };
 
+export type ExternalOpenRecorder = {
+  openedUrls: () => Promise<string[]>;
+};
+
 export const test = baseTest.extend<
   {
     context: BrowserContext;
@@ -179,6 +183,7 @@ export const test = baseTest.extend<
     collectionFixturePath: string | null;
     workspaceFixturePath: string | null;
     installFakeClipboard: (page: Page) => Promise<FakeClipboard>;
+    recordExternalOpens: () => Promise<ExternalOpenRecorder>;
     restartApp: (options?: { initUserDataPath?: string }) => Promise<ElectronApplication>;
   },
   {
@@ -370,6 +375,37 @@ export const test = baseTest.extend<
     await Promise.allSettled(
       patchedPages.map((page) => page.evaluate(() => Reflect.deleteProperty(navigator, 'clipboard')))
     );
+  },
+
+  recordExternalOpens: async ({ electronApp }, use) => {
+    let installed = false;
+
+    await use(async () => {
+      // Swap shell.openExternal for a recorder so links the app hands to the
+      // OS browser are captured instead of actually opening.
+      await electronApp.evaluate(({ shell }) => {
+        const recorder = globalThis as typeof globalThis & { __openExternal?: typeof shell.openExternal; __openedUrls?: string[] };
+        recorder.__openedUrls = [];
+        recorder.__openExternal ??= shell.openExternal;
+        shell.openExternal = async (url: string) => {
+          recorder.__openedUrls!.push(url);
+        };
+      });
+      installed = true;
+
+      return {
+        openedUrls: () => electronApp.evaluate(() => [...((globalThis as { __openedUrls?: string[] }).__openedUrls ?? [])])
+      };
+    });
+
+    if (installed) {
+      await electronApp.evaluate(({ shell }) => {
+        const recorder = globalThis as typeof globalThis & { __openExternal?: typeof shell.openExternal; __openedUrls?: string[] };
+        if (recorder.__openExternal) shell.openExternal = recorder.__openExternal;
+        delete recorder.__openExternal;
+        delete recorder.__openedUrls;
+      }).catch(() => {});
+    }
   },
 
   context: async ({ electronApp }, use, testInfo) => {

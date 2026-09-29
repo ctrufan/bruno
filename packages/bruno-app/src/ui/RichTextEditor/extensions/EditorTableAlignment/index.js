@@ -1,5 +1,4 @@
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
+import { TableCell, TableHeader } from '@tiptap/extension-table';
 
 const ALIGNMENTS = ['left', 'center', 'right'];
 

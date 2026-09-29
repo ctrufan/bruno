@@ -5,7 +5,7 @@ import { resolveInheritedAuth } from 'utils/auth';
 import { get } from 'lodash';
 import { interpolateUrl, interpolateUrlPathParams, prependDefaultScheme } from 'utils/url/index';
 import { parse } from 'url';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 
 // Folds any `cookie`/`Cookie` header into a single header.
 const mergeCookieHeaders = (headers, capitalizeCookieHeaderName) => {
@@ -119,7 +119,7 @@ const generateSnippet = async ({ language, item, collection, shouldInterpolate =
      */
     const displayRawUrl = item.rawUrl || rawUrl;
     const parsed = parse(encodedUrl, true, true);
-    const search = stringify(parsed.query, { sort: false });
+    const search = queryString.stringify(parsed.query, { sort: false });
     const httpSnippetPath = search ? `${parsed.pathname}?${search}` : parsed.pathname;
 
     let desiredPath;

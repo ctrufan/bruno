@@ -3,7 +3,7 @@ module.exports = {
     '^.+\\.(ts|js)$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(lodash-es|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp)/)'
+    '/node_modules/(?!(@faker-js|lodash-es|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp)/)'
   ],
   testEnvironment: 'node'
 };

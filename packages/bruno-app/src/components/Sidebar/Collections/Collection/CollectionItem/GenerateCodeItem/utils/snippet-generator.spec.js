@@ -1112,7 +1112,7 @@ describe('generateSnippet – encodeUrl setting', () => {
   // Replicate HTTPSnippet's internal encoding to get encoded path+query
   const getEncodedPath = (url) => {
     const { parse } = require('url');
-    const { stringify } = require('query-string');
+    const { stringify } = require('query-string').default;
     const parsed = parse(url, true, true);
     if (!parsed.query || Object.keys(parsed.query).length === 0) {
       return parsed.pathname;
