@@ -108,6 +108,10 @@ export const buildCommonLocators = (page: Page) => ({
     settingsTabBarTrigger: (scriptType: string) =>
       page.getByTestId('settings-tab-bar').getByTestId(`ai-assist-trigger-${scriptType}`)
   },
+  aiChat: {
+    headerToggle: () => page.getByTestId('ai-assistant'),
+    popoutToggle: () => page.getByTestId('ai-popout-toggle')
+  },
   folder: {
     chevron: (folderName: string) => page.locator('.collection-item-name').filter({ hasText: folderName }).getByTestId('folder-chevron')
   },

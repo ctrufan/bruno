@@ -99,6 +99,7 @@ async function setup() {
     // Install dependencies
     execCommand('npm i --legacy-peer-deps', 'Installing dependencies');
     forceInstallPlatformDeps();
+    execCommand('npx --no install-electron', 'Downloading Electron binary');
 
     // Build packages
     execCommand('npm run build:graphql-docs', 'Building graphql-docs');

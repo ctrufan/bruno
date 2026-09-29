@@ -1,16 +1,16 @@
 require('dotenv').config({ path: process.env.DOTENV_PATH });
 const fs = require('fs');
 const path = require('path');
-const electron_notarize = require('electron-notarize');
+const { notarize: notarizeApp } = require('@electron/notarize');
 
 const notarize = async function (params) {
   if (process.platform !== 'darwin') {
     return;
   }
 
-  let appId = 'com.usebruno.app';
+  const appId = 'com.usebruno.app';
 
-  let appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
+  const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
   if (!fs.existsSync(appPath)) {
     console.error(`Cannot find application at: ${appPath}`);
     return;
@@ -19,13 +19,10 @@ const notarize = async function (params) {
   console.log(`Notarizing ${appId} found at ${appPath} using Apple ID ${process.env.APPLE_ID}`);
   const teamId = 'W7LPPWA48L';
   try {
-    await electron_notarize.notarize({
-      tool: 'notarytool',
-      appBundleId: appId,
+    await notarizeApp({
       appPath: appPath,
       appleId: process.env.APPLE_ID,
       appleIdPassword: process.env.APPLE_ID_PASSWORD,
-      ascProvider: teamId,
       teamId: teamId
     });
   } catch (error) {

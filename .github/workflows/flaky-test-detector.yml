@@ -40,6 +40,7 @@ jobs:
       - name: Install npm dependencies
         run: |
           npm ci --legacy-peer-deps
+          npx --no install-electron
           CHROME_SANDBOX="${GITHUB_WORKSPACE}/node_modules/electron/dist/chrome-sandbox"
           if [[ -f "$CHROME_SANDBOX" ]]; then
             sudo chown root "$CHROME_SANDBOX"

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const fsExtra = require('fs-extra');
 const archiver = require('archiver');
-const extractZip = require('extract-zip');
+const { extractZip } = require('../utils/zip');
 const { ipcMain, dialog } = require('electron');
 const isDev = require('electron-is-dev');
 const { createDirectory, sanitizeName, writeFile, DEFAULT_GITIGNORE } = require('../utils/filesystem');
@@ -359,7 +359,7 @@ const registerWorkspaceIpc = (mainWindow, workspaceWatcher) => {
       await fsExtra.ensureDir(tempDir);
 
       try {
-        await extractZip(zipFilePath, { dir: tempDir });
+        await extractZip(zipFilePath, tempDir);
 
         const extractedItems = fs.readdirSync(tempDir);
         let workspaceDir = tempDir;

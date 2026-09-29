@@ -4,8 +4,8 @@ const fsExtra = require('fs-extra');
 const os = require('os');
 const path = require('path');
 const archiver = require('archiver');
-const extractZip = require('extract-zip');
 const AdmZip = require('adm-zip');
+const { extractZip } = require('../utils/zip');
 const { ipcMain, shell, dialog, app } = require('electron');
 const {
   parseRequest,
@@ -2691,31 +2691,10 @@ const registerRendererEventHandlers = (mainWindow, watcher) => {
       const tempDir = path.join(os.tmpdir(), `bruno_zip_import_${Date.now()}`);
       await fsExtra.ensureDir(tempDir);
 
-      // Validates that no symlinks point outside the base directory
-      const validateNoExternalSymlinks = (dir, baseDir) => {
-        const entries = fs.readdirSync(dir, { withFileTypes: true });
-        for (const entry of entries) {
-          const fullPath = path.join(dir, entry.name);
-          const stat = fs.lstatSync(fullPath);
-
-          if (stat.isSymbolicLink()) {
-            const linkTarget = fs.readlinkSync(fullPath);
-            const resolvedTarget = path.resolve(path.dirname(fullPath), linkTarget);
-            if (!resolvedTarget.startsWith(baseDir + path.sep) && resolvedTarget !== baseDir) {
-              throw new Error(`Security error: Symlink "${entry.name}" points outside extraction directory`);
-            }
-          }
-
-          if (stat.isDirectory() && !stat.isSymbolicLink()) {
-            validateNoExternalSymlinks(fullPath, baseDir);
-          }
-        }
-      };
-
       try {
-        await extractZip(zipFilePath, { dir: tempDir });
-
-        validateNoExternalSymlinks(tempDir, tempDir);
+        // extractZip rejects symlink and path-traversal entries, so nothing
+        // extracted below can point outside tempDir.
+        await extractZip(zipFilePath, tempDir);
 
         const extractedItems = fs.readdirSync(tempDir);
         let collectionDir = tempDir;
@@ -2733,14 +2712,6 @@ const registerRendererEventHandlers = (mainWindow, watcher) => {
 
         if (!fs.existsSync(brunoJsonPath) && !fs.existsSync(openCollectionYmlPath)) {
           throw new Error('Invalid collection: Neither bruno.json nor opencollection.yml found in the ZIP file');
-        }
-
-        // Ensure config files are not symlinks
-        if (fs.existsSync(brunoJsonPath) && fs.lstatSync(brunoJsonPath).isSymbolicLink()) {
-          throw new Error('Security error: bruno.json cannot be a symbolic link');
-        }
-        if (fs.existsSync(openCollectionYmlPath) && fs.lstatSync(openCollectionYmlPath).isSymbolicLink()) {
-          throw new Error('Security error: opencollection.yml cannot be a symbolic link');
         }
 
         let collectionName = 'Imported Collection';
