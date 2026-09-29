@@ -35,15 +35,21 @@ const ToolHint = ({
   };
 
   const usesExternalAnchor = Boolean(tooltipId || anchorSelect);
+  // The wrapper span keeps `toolhintId` as its DOM id, so the tooltip it points at gets a distinct one.
+  const ownTooltipId = `${toolhintId}-tooltip`;
   const toolhintProps_final = tooltipId
     ? { id: tooltipId }
     : anchorSelect
       ? { anchorSelect }
-      : { anchorId: toolhintId };
+      : { id: ownTooltipId };
 
   return (
     <>
-      {!usesExternalAnchor && <span id={toolhintId} className={className} data-testid={dataTestId}>{children}</span>}
+      {!usesExternalAnchor && (
+        <span id={toolhintId} data-tooltip-id={ownTooltipId} className={className} data-testid={dataTestId}>
+          {children}
+        </span>
+      )}
       {usesExternalAnchor && children}
       <ReactToolHint
         {...toolhintProps_final}

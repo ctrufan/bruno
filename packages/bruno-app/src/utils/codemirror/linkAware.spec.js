@@ -1,15 +1,15 @@
 import { setupLinkAware, extendUrlWithBalancedParentheses } from './linkAware';
-import LinkifyIt from 'linkify-it';
+import { LinkifyIt } from 'linkify-it';
 import { isMacOS } from 'utils/common/platform';
 
 // No need to mock CodeMirror since setupLinkAware works with an existing editor
 
 // Mock linkify-it
-jest.mock('linkify-it', () => {
-  return jest.fn().mockImplementation(() => ({
+jest.mock('linkify-it', () => ({
+  LinkifyIt: jest.fn().mockImplementation(() => ({
     match: jest.fn()
-  }));
-});
+  }))
+}));
 
 jest.mock('utils/common/platform', () => ({
   isMacOS: jest.fn()

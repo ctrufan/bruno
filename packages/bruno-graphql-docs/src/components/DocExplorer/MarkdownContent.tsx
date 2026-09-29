@@ -14,6 +14,8 @@ const md = new MD({
   // render urls as links, à la github-flavored markdown
   linkify: true
 });
+// markdown-it 15 no longer autolinks bare domains (example.com); keep GitHub-style autolinking.
+md.linkify.set({ fuzzyLink: true, urlAuth: true });
 
 type MarkdownContentProps = {
   markdown?: Maybe<string>;

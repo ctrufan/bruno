@@ -6,8 +6,8 @@ import { sendRequest, saveRequest } from 'providers/ReduxStore/slices/collection
 import { usePersistedState } from 'hooks/usePersistedState';
 import { Document, Page } from 'react-pdf';
 import 'pdfjs-dist/build/pdf.worker';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 import { GlobalWorkerOptions } from 'pdfjs-dist/build/pdf';
 GlobalWorkerOptions.workerSrc = 'pdfjs-dist/legacy/build/pdf.worker.min.mjs';
 import XmlPreview from './XmlPreview/index';

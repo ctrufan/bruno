@@ -377,7 +377,7 @@ const EditableTable = React.forwardRef(({
         <Tooltip
           className="tooltip-mod"
           id={`error-${row.uid}-${column.key}`}
-          html={error}
+          content={error}
         />
       </span>
     ) : null;

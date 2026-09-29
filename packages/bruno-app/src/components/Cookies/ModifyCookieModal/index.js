@@ -232,11 +232,11 @@ const ModifyCookieModal = ({ onClose, domain, cookie }) => {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <label className="block">Set-Cookie String</label>
-                <IconInfoCircle id="cookie-raw-info" size={16} strokeWidth={1.5} className="info-icon" />
+                <IconInfoCircle data-tooltip-id="cookie-raw-info" size={16} strokeWidth={1.5} className="info-icon" />
                 <Tooltip
-                  anchorId="cookie-raw-info"
+                  id="cookie-raw-info"
                   className="tooltip-mod"
-                  html="Key, Path, and Domain are immutable properties and cannot be modified for existing cookies"
+                  content="Key, Path, and Domain are immutable properties and cannot be modified for existing cookies"
                 />
               </div>
               <textarea

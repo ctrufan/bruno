@@ -56,12 +56,12 @@ const HEADER_HINT_STYLE = {
 
 const HeaderHint = ({ id, text, className, place = 'top', testId, tooltipTestId, children }) => (
   <>
-    <span id={id} className={className} data-testid={testId}>
+    <span data-tooltip-id={id} className={className} data-testid={testId}>
       {children}
     </span>
     <Portal>
       <Tooltip
-        anchorId={id}
+        id={id}
         className="tooltip-mod"
         content={text}
         place={place}

@@ -1,4 +1,4 @@
-import LinkifyIt from 'linkify-it';
+import { LinkifyIt } from 'linkify-it';
 import { isMacOS } from 'utils/common/platform';
 import { debounce } from 'lodash';
 
@@ -255,7 +255,8 @@ function setupLinkAware(editor, options = {}) {
   const isCmdOrCtrlPressed = (event) => (isMacOS() ? event.metaKey : event.ctrlKey);
 
   // Initialize LinkifyIt for URL detection
-  const linkify = new LinkifyIt();
+  // Also match bare domains (example.com) and credentials in URLs, as linkify-it did before v6.
+  const linkify = new LinkifyIt({ fuzzyLink: true, urlAuth: true });
   const editorWrapper = editor.getWrapperElement();
   if (typeof onLinkClick === 'function') {
     editorWrapper.classList.add(linkClickClass);

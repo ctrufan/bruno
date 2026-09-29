@@ -2,12 +2,14 @@ import React, { useCallback, useMemo, useRef, useEffect, useState } from 'react'
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
 import MenuDropdown from 'ui/MenuDropdown';
 import { IconChevronDown, IconCopy, IconCheck } from '@tabler/icons';
-import { lowlight } from 'lowlight';
+import { common, createLowlight } from 'lowlight';
 import protobuf from 'highlight.js/lib/languages/protobuf';
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
 import { EDITOR_MENU_DROPDOWN_PROPS } from '../../utils/editorToolbarUi';
 
-lowlight.registerLanguage('protobuf', protobuf);
+// Shared with the CodeBlockLowlight extension so highlighting and language detection use the same grammars.
+export const lowlight = createLowlight(common);
+lowlight.register('protobuf', protobuf);
 
 const LANGUAGES = [
   'javascript',

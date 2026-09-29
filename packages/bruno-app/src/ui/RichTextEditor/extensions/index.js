@@ -22,8 +22,7 @@ import {
 } from './EditorTaskList';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { ReactNodeViewRenderer } from '@tiptap/react';
-import EditorCodeBlock from './EditorCodeBlock';
-import { lowlight } from 'lowlight';
+import EditorCodeBlock, { lowlight } from './EditorCodeBlock';
 
 const EditorCodeBlockExtension = CodeBlockLowlight.extend({
   addNodeView() {
