@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'components/Modal/index';
-import { PostHog } from 'posthog-node';
+import { PostHog } from 'posthog-node/edge';
 import { uuid } from 'utils/common';
 import { IconHeart, IconUser, IconUsers, IconPlus } from '@tabler/icons';
 import platformLib from 'platform';

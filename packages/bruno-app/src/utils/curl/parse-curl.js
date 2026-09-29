@@ -1,4 +1,4 @@
-import cookie from 'cookie';
+import { parseCookie } from 'cookie';
 import URL from 'url';
 import { parse } from 'shell-quote';
 import { isEmpty } from 'lodash';
@@ -271,7 +271,7 @@ const setCookie = (request, value) => {
     return;
   }
 
-  const parsedCookies = cookie.parse(value);
+  const parsedCookies = parseCookie(value);
   request.cookies = { ...request.cookies, ...parsedCookies };
   request.cookieString = request.cookieString ? request.cookieString + '; ' + value : value;
 

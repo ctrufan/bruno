@@ -11,6 +11,9 @@ const md = new MarkdownIt({
     `<pre class="code-block"><code class="language-${safeLanguage(lang)}">${md.utils.escapeHtml(str)}</code></pre>`
 });
 
+// markdown-it 15 no longer autolinks bare domains (example.com); keep GitHub-style autolinking.
+md.linkify.set({ fuzzyLink: true, urlAuth: true });
+
 export const renderMarkdown = (content) => md.render(content || '');
 
 export const parseMessageSegments = (content = '') => {

@@ -29,7 +29,10 @@ const getTerminalTheme = (theme) => {
     brightBlue: theme.status.info.text,
     brightMagenta: theme.colors.text.purple,
     brightCyan: theme.codemirror.variable.prompt,
-    brightWhite: theme.text
+    brightWhite: theme.text,
+    scrollbarSliderBackground: theme.console.scrollbarThumb,
+    scrollbarSliderHoverBackground: theme.console.scrollbarThumbHover,
+    scrollbarSliderActiveBackground: theme.console.scrollbarThumbHover
   };
 };
 

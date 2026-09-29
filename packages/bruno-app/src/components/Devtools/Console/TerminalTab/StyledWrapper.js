@@ -149,25 +149,6 @@ const StyledWrapper = styled.div`
     .xterm-decoration-overview-ruler {
       display: none;
     }
-
-    /* Custom scrollbar for terminal */
-    .xterm-viewport::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .xterm-viewport::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
-    }
-
-    .xterm-viewport::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-    }
-
-    .xterm-viewport::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
   }
 
   /* Dark theme adjustments */

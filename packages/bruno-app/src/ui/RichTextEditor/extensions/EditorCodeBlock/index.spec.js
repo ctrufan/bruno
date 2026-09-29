@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import React from 'react';
 import { render } from '@testing-library/react';
 import EditorCodeBlock from './index';
-import { lowlight } from 'lowlight';
+import { lowlight } from '../../utils/editorLowlight';
 
 jest.mock('@tiptap/react', () => ({
   NodeViewWrapper: ({ children, className }) => <div data-testid="node-view-wrapper" className={className}>{children}</div>,
@@ -28,10 +28,11 @@ jest.mock('ui/MenuDropdown', () => {
 });
 
 jest.mock('lowlight', () => ({
-  lowlight: {
+  common: {},
+  createLowlight: () => ({
     highlightAuto: jest.fn(),
-    registerLanguage: jest.fn()
-  }
+    register: jest.fn()
+  })
 }));
 
 describe('EditorCodeBlock', () => {

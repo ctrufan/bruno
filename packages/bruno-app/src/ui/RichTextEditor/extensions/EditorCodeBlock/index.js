@@ -2,12 +2,9 @@ import React, { useCallback, useMemo, useRef, useEffect, useState } from 'react'
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
 import MenuDropdown from 'ui/MenuDropdown';
 import { IconChevronDown, IconCopy, IconCheck } from '@tabler/icons';
-import { lowlight } from 'lowlight';
-import protobuf from 'highlight.js/lib/languages/protobuf';
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
 import { EDITOR_MENU_DROPDOWN_PROPS } from '../../utils/editorToolbarUi';
-
-lowlight.registerLanguage('protobuf', protobuf);
+import { lowlight } from '../../utils/editorLowlight';
 
 const LANGUAGES = [
   'javascript',

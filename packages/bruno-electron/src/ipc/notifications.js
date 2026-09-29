@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const { ipcMain } = require('electron');
 const fetch = require('node-fetch');
 

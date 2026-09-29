@@ -7,7 +7,7 @@
  */
 
 import { useEffect } from 'react';
-import { PostHog } from 'posthog-node';
+import { PostHog } from 'posthog-node/edge';
 import platformLib from 'platform';
 import { uuid } from 'utils/common';
 

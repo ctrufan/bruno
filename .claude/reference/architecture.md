@@ -136,7 +136,8 @@ Several are pinned to majors below the latest — do **not** assume the newest A
   a general data layer), **@reduxjs/toolkit ^1.8 (v1, NOT v2)**,
   **react-redux ^7 (v7)**, **styled-components ^5 (NOT v6)**, **tailwindcss ^3**,
   **@rsbuild/core ^1.7**, **codemirror 5.65.2 (CodeMirror 5, NOT the scoped `@codemirror/*`)**,
-  **@tiptap/* ^3** (docs editor).
+  **@tiptap/* ^3** (docs editor), **react-tooltip ^6** (no `html`/`anchorId` props — use `content`/children
+  and `data-tooltip-id` on the anchor).
 - Desktop (`bruno-electron`): **electron ~44.4** (no postinstall binary download — run
   `npx install-electron`), **electron-builder ^26.15**, **chokidar ^3.5**, **@grpc/grpc-js ^1.14**,
   **js-yaml 4.3**, **electron-store ^8.1**. (`ws` is a dep of
@@ -144,10 +145,13 @@ Several are pinned to majors below the latest — do **not** assume the newest A
 - Storage (`bruno-sqlite`): no runtime dependencies — the driver is Node's built-in **`node:sqlite`**
   (synchronous `DatabaseSync`); `@tanstack/react-query` 5.101.1 + react 19 are *peer* deps of the
   `/web` entry only; **node-sql-parser 5.4** and **tsx** are build-time (codegen) only.
-- Parsing (`bruno-lang`): **arcsecond ^5** (v1, legacy), **ohm-js ^16.6** (v2, current).
+- Parsing (`bruno-lang`): **arcsecond ^5** (v1, legacy), **ohm-js ^17** (v2, current).
   `bruno-toml` wraps **@iarna/toml** but is currently unused.
 - **Hard pins in root `package.json` `overrides`: axios `1.18.0`, rollup `3.30.0`**, plus security
   overrides for transitive deps (tar, form-data@4, jshint's lodash/minimatch, jsonlint's ajv, …).
   Bumping these in a leaf package has no effect — change the root override.
-- **TypeScript is not uniform**: bruno-common `^5.8`, bruno-schema-types `^5.0`, but
-  bruno-converters/filestore/graphql-docs/query/requests are `^4.8`. There is no root TS dep.
+- **TypeScript 5.9 in every package** (declared per package; there is no root TS dep). TypeScript
+  packages build declarations with `rollup-plugin-dts` from `src/index.ts`, not via
+  `@rollup/plugin-typescript`'s `declarationDir`.
+- Tests: **Jest 30** (`jest-environment-jsdom` 30 → jsdom 26, where `window` cannot be reassigned —
+  stub members on the real `window` instead of replacing `global.window`).

@@ -233,36 +233,36 @@ const CollectionProperties = ({ onClose }) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {domainWithCookies.cookies.map((cookie) => (
+                            {domainWithCookies.cookies.map((cookie, cookieIndex) => (
                               <tr key={cookie.key}>
                                 <td className="py-2 px-4 truncate">
-                                  <span id={`cookie-key-${cookie.key}`}>{cookie.key}</span>
+                                  <span data-tooltip-id={`cookie-key-${i}-${cookieIndex}`}>{cookie.key}</span>
                                   <Tooltip
-                                    anchorId={`cookie-key-${cookie.key}`}
+                                    id={`cookie-key-${i}-${cookieIndex}`}
                                     className="tooltip-mod"
-                                    html={cookie.key}
+                                    content={cookie.key}
                                   />
                                 </td>
                                 <td className="py-2 px-4 truncate">
-                                  <span id={`cookie-value-${cookie.key}`}>{cookie.value}</span>
+                                  <span data-tooltip-id={`cookie-value-${i}-${cookieIndex}`}>{cookie.value}</span>
                                   <Tooltip
-                                    anchorId={`cookie-value-${cookie.key}`}
+                                    id={`cookie-value-${i}-${cookieIndex}`}
                                     className="tooltip-mod"
-                                    html={cookie.value}
+                                    content={cookie.value}
                                   />
                                 </td>
                                 <td className="py-2 px-4 truncate">{cookie.path || '/'}</td>
                                 <td className="py-2 px-4 truncate">
-                                  <span id={`cookie-expires-${cookie.key}`}>
+                                  <span data-tooltip-id={`cookie-expires-${i}-${cookieIndex}`}>
                                     {cookie.expires && moment(cookie.expires).isValid()
                                       ? new Date(cookie.expires).toLocaleString()
                                       : 'Session'}
                                   </span>
                                   {cookie.expires && moment(cookie.expires).isValid() && (
                                     <Tooltip
-                                      anchorId={`cookie-expires-${cookie.key}`}
+                                      id={`cookie-expires-${i}-${cookieIndex}`}
                                       className="tooltip-mod"
-                                      html={new Date(cookie.expires).toLocaleString()}
+                                      content={new Date(cookie.expires).toLocaleString()}
                                     />
                                   )}
                                 </td>

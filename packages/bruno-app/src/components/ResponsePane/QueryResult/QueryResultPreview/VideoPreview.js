@@ -1,6 +1,5 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import ReactPlayer from 'react-player';
 
 const VideoPreview = React.memo(({ contentType, dataBuffer }) => {
   const [videoUrl, setVideoUrl] = useState(null);
@@ -17,10 +16,10 @@ const VideoPreview = React.memo(({ contentType, dataBuffer }) => {
   if (!videoUrl) return <div>Loading video...</div>;
 
   return (
-    <ReactPlayer
-      url={videoUrl}
+    <video
+      src={videoUrl}
       controls
-      muted={true}
+      muted
       width="100%"
       height="100%"
       onError={(e) => console.error('Error loading video:', e)}

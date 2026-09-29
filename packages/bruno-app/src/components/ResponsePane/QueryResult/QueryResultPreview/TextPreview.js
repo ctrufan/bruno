@@ -1,9 +1,10 @@
-import LinkifyIt from 'linkify-it';
+import { LinkifyIt } from 'linkify-it';
 import React, { Fragment, memo, useMemo } from 'react';
 import { useChunkedReveal } from 'hooks/useChunkedReveal';
 import { isHttpUrl } from 'utils/url';
 
-const linkify = new LinkifyIt();
+// Also match bare domains (example.com) and credentials in URLs, as linkify-it did before v6.
+const linkify = new LinkifyIt({ fuzzyLink: true, urlAuth: true });
 
 const TextPreview = memo(({ data, onLinkClick }) => {
   const displayData = useMemo(() => {

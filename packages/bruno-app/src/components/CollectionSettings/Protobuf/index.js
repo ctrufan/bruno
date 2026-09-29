@@ -117,13 +117,13 @@ const ProtobufSettings = ({ collection }) => {
               Proto Files (
               {protoFiles.length}
               )
-              <span id="proto-files-tooltip" className="ml-2">
+              <span data-tooltip-id="proto-files-tooltip" className="ml-2">
                 <IconAlertCircle size={16} className="tooltip-icon" />
               </span>
               <Tooltip
-                anchorId="proto-files-tooltip"
+                id="proto-files-tooltip"
                 className="tooltip-mod font-normal"
-                html="Keep your proto files within the collection folder or the corresponding git repository to ensure paths remain valid when sharing the collection."
+                content="Keep your proto files within the collection folder or the corresponding git repository to ensure paths remain valid when sharing the collection."
               />
             </label>
           </div>
@@ -224,13 +224,13 @@ const ProtobufSettings = ({ collection }) => {
               Import Paths (
               {importPaths.length}
               )
-              <span id="import-paths-tooltip" className="ml-2">
+              <span data-tooltip-id="import-paths-tooltip" className="ml-2">
                 <IconAlertCircle size={16} className="tooltip-icon" />
               </span>
               <Tooltip
-                anchorId="import-paths-tooltip"
+                id="import-paths-tooltip"
                 className="tooltip-mod font-normal"
-                html="Add directories that contain proto files to be imported. These paths help resolve import statements in your proto files."
+                content="Add directories that contain proto files to be imported. These paths help resolve import statements in your proto files."
               />
             </label>
           </div>
